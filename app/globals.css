@@ -1,0 +1,985 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Updated TikTok brand colors to semantic tokens */
+  --brand-primary: oklch(0.5 0.35 355); /* TikTok Pink #ff004f */
+  --brand-primary-foreground: oklch(1 0 0); /* White for text on pink */
+  --brand-accent: oklch(0.85 0.15 190); /* TikTok Cyan #00f2ea */
+  --brand-accent-foreground: oklch(0.145 0 0); /* Black for text on cyan */
+  --surface-dark: oklch(0.145 0 0); /* Black surface */
+  --surface-dark-foreground: oklch(0.985 0 0); /* White text on black */
+  --surface-light: oklch(0.975 0 0); /* Light gray surface */
+  --surface-light-foreground: oklch(0.4 0 0); /* Dark gray text on light gray */
+  --info-bg: oklch(0.92 0.05 195); /* Cyan tint for info sections */
+  --info-foreground: oklch(0.145 0 0); /* Black text on info background */
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --font-sans: var(--font-tiktok-sans), "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Added semantic brand color tokens to theme */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-foreground: var(--brand-primary-foreground);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-foreground: var(--brand-accent-foreground);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-foreground: var(--surface-dark-foreground);
+  --color-surface-light: var(--surface-light);
+  --color-surface-light-foreground: var(--surface-light-foreground);
+  --color-info-bg: var(--info-bg);
+  --color-info-foreground: var(--info-foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ============================================
+   CSS LOCKER STYLES
+   ============================================ */
+
+#my-locker {
+  background: transparent !important;
+  margin: 0;
+  position: fixed;
+  z-index: 9999;
+  width: 330px;
+}
+
+#my-locker,
+#my-locker * {
+  font-family: var(--font-tiktok-sans), sans-serif;
+}
+
+body.mobile #my-locker {
+  max-width: none;
+  width: 90%;
+}
+
+#my-locker-body {
+  border-color: #d3d3d3 !important;
+  padding: 0 !important;
+}
+
+#my-locker-body-offers {
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  height: 391px;
+  left: 61px;
+  letter-spacing: normal;
+  padding: 0px;
+  position: fixed;
+  top: 15px;
+  width: 365px;
+  z-index: 6;
+  font-family: var(--font-tiktok-sans), sans-serif;
+}
+
+body.mobile #my-locker-body-offers {
+  left: 50%;
+  margin: 0 auto;
+  position: fixed;
+  top: 10%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 365px;
+  z-index: 8;
+}
+
+#my-locker-body-offers .my-locker-body-text-top {
+  background: #4a90e2;
+  margin: 10px 10px 15px;
+  padding: 15px 15px 13px;
+  color: #fff;
+  font-family: var(--font-tiktok-sans), sans-serif;
+}
+
+#my-locker-body-offers .my-locker-body-text-top strong {
+  font-weight: 700;
+}
+
+#my-locker-body-offers #verifying {
+  border-top: 1px solid #dbdbdb;
+  height: auto;
+  min-height: 40px;
+  margin-top: 15px;
+  padding: 12px 10px;
+}
+
+#my-locker-body-offers #verifying #verify-container {
+  display: table;
+  height: inherit;
+  width: 100%;
+}
+
+#my-locker-body-offers #verifying #verify-container > * {
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+}
+
+#my-locker-body-offers #verifying #options img {
+  cursor: pointer;
+  height: 20px;
+  margin-left: 2px;
+  margin-top: 6px;
+}
+
+#my-locker-body-offers #verifying #button {
+  width: 80px;
+}
+
+#my-locker-body-offers #verifying #button button {
+  background: #9e9e9e;
+  border: 0;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  width: 100%;
+  font-family: var(--font-tiktok-sans), sans-serif;
+  transition: background 0.2s;
+}
+
+#my-locker-body-offers #verifying #button button:hover {
+  background: #757575;
+}
+
+#my-locker-body-offers-list {
+  height: 233px;
+  margin: 10px;
+  padding: 0 !important;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#my-locker-body-offers-list a {
+  margin-left: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 10px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  font-family: var(--font-tiktok-sans), sans-serif;
+  transition: background 0.2s;
+  pointer-events: auto;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+#my-locker-body-offers-list a:hover {
+  background: #f5f5f5;
+}
+
+#my-locker-body-offers-list a > * {
+  margin-left: 0 !important;
+}
+
+#my-locker-body-offers-list a span {
+  flex: 1;
+  padding: 0 !important;
+  max-width: 100% !important;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  display: block;
+}
+
+#my-locker-body-offers-list a font {
+  display: none !important;
+}
+
+#my-locker-body-offers-list a .rating {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+}
+
+#my-locker-body-offers-list a .rating img {
+  height: 14px;
+  width: auto;
+}
+
+#my-locker-body-human-verification button {
+  display: none !important;
+}
+
+#ve-google-recaptcha-overlay {
+  background: #000000ba;
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 7;
+}
+
+body.mobile.ve-google-recaptcha-open #ve-google-recaptcha-overlay {
+  display: block;
+}
+
+#ve-google-recaptcha {
+  border: 1px solid #DDD;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  height: 72px;
+  letter-spacing: normal;
+  z-index: 99999;
+  background: #fff;
+  position: fixed;
+  box-shadow: 0 0 4px 1px rgba(0,0,0,.08);
+  width: 330px;
+  border-radius: 4px;
+  transform: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  /* Position (top/left) will be set by JavaScript dynamically - no CSS defaults */
+}
+
+#ve-google-recaptcha #container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  padding: 0 16px;
+}
+
+#ve-google-recaptcha #logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+#ve-google-recaptcha #recaptcha-logo {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+#ve-google-recaptcha #recaptcha-text {
+  color: #9E9E9E;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  text-transform: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+#ve-google-recaptcha #verify-button-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+#ve-google-recaptcha #verify-captcha-btn {
+  background: #4285F4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+#ve-google-recaptcha #verify-captcha-btn:hover {
+  background: #357AE8;
+}
+
+#ve-google-recaptcha #verify-captcha-btn:active {
+  background: #2B6ED3;
+}
+
+#ve-google-recaptcha #validation {
+  text-align: left;
+  min-width: 38px;
+  width: 38px;
+  position: relative !important; /* Ensure relative positioning for absolute children */
+}
+
+#ve-google-recaptcha #validation #square {
+  border: 2px solid #C2C2C2;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  display: block;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+}
+
+#ve-google-recaptcha #validation #circle-acting {
+  background-image: url(https://i.imgur.com/FHLomy7.png);
+  display: none;
+  height: 38px !important;
+  width: 38px !important;
+  position: absolute !important;
+  left: -4px !important;
+  top: -4px !important;
+  z-index: 11;
+  margin: 0 !important;
+  padding: 0 !important;
+  -moz-animation: blue-circle-anim .8s steps(97) !important;
+  -ms-animation: blue-circle-anim .8s steps(97) !important;
+  -o-animation: blue-circle-anim .8s steps(97) !important;
+  -webkit-animation: blue-circle-anim .8s steps(97) !important;
+  animation: blue-circle-anim .8s steps(97) !important;
+}
+
+
+#ve-google-recaptcha #not-a-robot {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  padding-left: 10px;
+  width: 100%;
+  font-family: var(--font-tiktok-sans), sans-serif;
+  pointer-events: auto;
+  user-select: none;
+}
+
+#ve-google-recaptcha #logo {
+  text-align: center;
+  width: 60px;
+  white-space: nowrap;
+}
+
+#ve-google-recaptcha #logo img {
+  height: 30px;
+  width: 30px;
+}
+
+#ve-google-recaptcha #logo #details center {
+  color: #9b9b9b;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 10px;
+  margin-bottom: -4px;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--font-tiktok-sans), sans-serif;
+}
+
+#ve-google-recaptcha #logo #details #links {
+  line-height: 1;
+  margin-bottom: -4px;
+}
+
+#ve-google-recaptcha #logo #details #links a {
+  color: #9b9b9b;
+  font-size: 8px;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: var(--font-tiktok-sans), sans-serif;
+}
+
+#ve-google-recaptcha #logo #details #links a#privacy::after {
+  color: #9b9b9b;
+  content: "-";
+  font-size: 8px;
+  margin: 0 2px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #C1C1C1;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #F1F1F1;
+  border: solid 1px #F1F1F1;
+  border-radius: 1px;
+}
+
+/* ============================================
+   OGADS CONTENT LOCKER STYLES
+   ============================================ */
+
+/* Content Locker Styles - Exact Match */
+#my-locker {
+  background: transparent !important;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  display: none;
+}
+
+body.mobile #my-locker {
+  max-width: none;
+}
+
+body.mobile.editing #my-locker {
+  max-width: 330px;
+}
+
+#my-locker-body {
+  border-color: #d3d3d3 !important;
+  padding: 0 !important;
+}
+
+#my-locker-body-offers {
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  height: auto;
+  max-height: 500px;
+  left: 50% !important;
+  letter-spacing: normal;
+  margin: 0 !important;
+  padding: 0px;
+  position: fixed !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 400px;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+}
+
+body.mobile #my-locker-body-offers {
+  left: 50% !important;
+  margin: 0 auto !important;
+  position: fixed !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 90%;
+  max-width: 400px;
+  z-index: 9;
+  max-height: 80vh;
+}
+
+body.editing.mobile #my-locker-body-offers {
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  height: auto;
+  max-height: 500px;
+  left: 50% !important;
+  letter-spacing: normal;
+  margin: 0 !important;
+  padding: 0px;
+  position: fixed !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 400px;
+  z-index: 9;
+}
+
+body.editing #my-locker-body-offers {
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+}
+
+#my-locker-body-offers .my-locker-body-text-top {
+  background: #4a90e2;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  border-radius: 4px 4px 0 0;
+}
+
+#my-locker-body-offers .my-locker-body-text-top strong {
+  font-weight: 700;
+  display: block;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+}
+
+#my-locker-body-offers #verifying {
+  border-top: 1px solid #dbdbdb;
+  padding: 15px;
+  background: #fff;
+  border-radius: 0 0 4px 4px;
+}
+
+#my-locker-body-offers #verifying #verify-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#my-locker-body-offers #verifying #button {
+  width: 100%;
+  max-width: 200px;
+}
+
+#my-locker-body-offers #verifying #button button {
+  background: #4a90e2;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 12px 30px;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+#my-locker-body-offers #verifying #button button:hover {
+  background: #357abd;
+}
+
+#my-locker-body-offers-list {
+  height: 280px;
+  margin: 0;
+  padding: 0 !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #fff;
+}
+
+#my-locker-body-offers-list .offer-tile {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+  margin: 0;
+}
+
+#my-locker-body-offers-list .offer-tile:hover {
+  background-color: #f5f5f5;
+}
+
+#my-locker-body-offers-list .offer-tile:last-child {
+  border-bottom: none;
+}
+
+#my-locker-body-offers-list .offer-image-wrapper {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  margin-right: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#my-locker-body-offers-list .offer-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#my-locker-body-offers-list .offer-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 10px;
+  text-align: center;
+  padding: 5px;
+  background: #f0f0f0;
+}
+
+#my-locker-body-offers-list .offer-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#my-locker-body-offers-list .offer-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+
+#my-locker-body-offers-list .offer-description {
+  font-size: 14px;
+  color: #999;
+  line-height: 1.3;
+}
+
+#my-locker-body-human-verification {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 11;
+  pointer-events: none; /* Allow clicks through to CAPTCHA */
+  align-items: normal !important;
+  justify-content: normal !important;
+  transform: none !important; /* Prevent creating new containing block */
+  perspective: none !important;
+  filter: none !important;
+  will-change: auto !important; /* Prevent creating containing block */
+}
+
+/* CAPTCHA will be moved to body for true fixed positioning */
+#ve-google-recaptcha {
+  pointer-events: auto; /* Re-enable clicks on CAPTCHA */
+}
+
+#my-locker-body-human-verification button {
+  display: none !important;
+}
+
+#ve-google-recaptcha-overlay {
+  background: #000000ba;
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 7;
+}
+
+body.mobile.ve-google-recaptcha-open #ve-google-recaptcha-overlay {
+  display: block;
+}
+
+body.editing.mobile.ve-google-recaptcha-open #ve-google-recaptcha-overlay {
+  display: none;
+}
+
+#ve-google-recaptcha {
+  background: #fff;
+  border: 1px solid #DDD;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  height: 72px;
+  letter-spacing: normal;
+  position: fixed;
+  width: 330px;
+  z-index: 99999;
+  -moz-box-shadow: 0 0 4px 1px rgba(0,0,0,.08);
+  -webkit-box-shadow: 0 0 4px 1px rgba(0,0,0,.08);
+  box-shadow: 0 0 4px 1px rgba(0,0,0,.08);
+  border-radius: 4px;
+  transform: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  /* Position (top/left) will be set by JavaScript dynamically - no CSS defaults */
+}
+
+body.mobile #ve-google-recaptcha {
+  width: 90%;
+  max-width: 330px;
+}
+
+#ve-google-recaptcha #container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  padding: 0 16px;
+}
+
+#ve-google-recaptcha #logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+#ve-google-recaptcha #recaptcha-logo {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+#ve-google-recaptcha #recaptcha-text {
+  color: #9E9E9E;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  text-transform: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+#ve-google-recaptcha #verify-button-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+#ve-google-recaptcha #verify-captcha-btn {
+  background: #4285F4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+#ve-google-recaptcha #verify-captcha-btn:hover {
+  background: #357AE8;
+}
+
+#ve-google-recaptcha #verify-captcha-btn:active {
+  background: #2B6ED3;
+}
+
+#ve-google-recaptcha #verify-captcha-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+#ve-google-recaptcha #validation {
+  text-align: left;
+  min-width: 38px;
+  width: 38px;
+  position: relative !important; /* Ensure relative positioning for absolute children */
+}
+
+#ve-google-recaptcha #validation #square {
+  border: 2px solid #C2C2C2;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  position: relative;
+}
+
+#ve-google-recaptcha #validation #circle-acting {
+  background-image: url(https://i.imgur.com/FHLomy7.png);
+  display: none;
+  height: 38px !important;
+  width: 38px !important;
+  position: absolute !important;
+  left: -4px !important;
+  top: -4px !important;
+  z-index: 11;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-position: 0 0 !important;
+  background-repeat: no-repeat !important;
+  -moz-animation: blue-circle-anim .8s steps(97) !important;
+  -ms-animation: blue-circle-anim .8s steps(97) !important;
+  -o-animation: blue-circle-anim .8s steps(97) !important;
+  -webkit-animation: blue-circle-anim .8s steps(97) !important;
+  animation: blue-circle-anim .8s steps(97) !important;
+}
+
+#ve-google-recaptcha #validation #circle-loading {
+  background-image: url('https://i.imgur.com/cOBJ3AL.png');
+  display: none;
+  height: 36px !important;
+  width: 36px !important;
+  position: absolute !important;
+  left: -3px !important;
+  top: -3px !important;
+  z-index: 11;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-position: 0 0 !important;
+  background-repeat: no-repeat !important;
+  -moz-animation: blue-circle-loading-anim 1.7s steps(79) infinite !important;
+  -ms-animation: blue-circle-loading-anim 1.7s steps(79) infinite !important;
+  -o-animation: blue-circle-loading-anim 1.7s steps(79) infinite !important;
+  -webkit-animation: blue-circle-loading-anim 1.7s steps(79) infinite !important;
+  animation: blue-circle-loading-anim 1.7s steps(79) infinite !important;
+}
+
+/* Old CAPTCHA elements - hidden (not used in new design) */
+#ve-google-recaptcha #not-a-robot,
+#ve-google-recaptcha #validation,
+#ve-google-recaptcha #logo {
+  display: none;
+}
+
+@-moz-keyframes blue-circle-loading-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -2844px !important; }
+}
+
+@-ms-keyframes blue-circle-loading-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -2844px !important; }
+}
+
+@-webkit-keyframes blue-circle-loading-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -2844px !important; }
+}
+
+@keyframes blue-circle-loading-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -2844px !important; }
+}
+
+@-moz-keyframes blue-circle-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -3686px !important; }
+}
+
+@-ms-keyframes blue-circle-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -3686px !important; }
+}
+
+@-webkit-keyframes blue-circle-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -3686px !important; }
+}
+
+@keyframes blue-circle-anim {
+  0% { background-position-y: 0 !important; }
+  100% { background-position-y: -3686px !important; }
+}

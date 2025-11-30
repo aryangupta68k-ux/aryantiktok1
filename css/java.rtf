@@ -1,0 +1,243 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 /* EDIT THESE VARIABLES */\
+\
+var centerHorizontally = true;\
+var centerVertically = false;\
+\
+/* DON'T EDIT BELOW HERE */\
+\
+(function($) \{    \
+  if ($.fn.style) \{\
+    return;\
+  \}\
+\
+  // Escape regex chars with \\\
+  var escape = function(text) \{\
+    return text.replace(/[-[\\]\{\}()*+?.,\\\\^$|#\\s]/g, "\\\\$&");\
+  \};\
+\
+  // For those who need them (< IE 9), add support for CSS functions\
+  var isStyleFuncSupported = !!CSSStyleDeclaration.prototype.getPropertyValue;\
+  if (!isStyleFuncSupported) \{\
+    CSSStyleDeclaration.prototype.getPropertyValue = function(a) \{\
+      return this.getAttribute(a);\
+    \};\
+    CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) \{\
+      this.setAttribute(styleName, value);\
+      var priority = typeof priority != 'undefined' ? priority : '';\
+      if (priority != '') \{\
+        // Add priority manually\
+        var rule = new RegExp(escape(styleName) + '\\\\s*:\\\\s*' + escape(value) +\
+            '(\\\\s*;)?', 'gmi');\
+        this.cssText =\
+            this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');\
+      \}\
+    \};\
+    CSSStyleDeclaration.prototype.removeProperty = function(a) \{\
+      return this.removeAttribute(a);\
+    \};\
+    CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) \{\
+      var rule = new RegExp(escape(styleName) + '\\\\s*:\\\\s*[^\\\\s]*\\\\s*!important(\\\\s*;)?',\
+          'gmi');\
+      return rule.test(this.cssText) ? 'important' : '';\
+    \}\
+  \}\
+\
+  // The style function\
+  $.fn.style = function(styleName, value, priority) \{\
+    // DOM node\
+    var node = this.get(0);\
+    // Ensure we have a DOM node\
+    if (typeof node == 'undefined') \{\
+      return this;\
+    \}\
+    // CSSStyleDeclaration\
+    var style = this.get(0).style;\
+    // Getter/Setter\
+    if (typeof styleName != 'undefined') \{\
+      if (typeof value != 'undefined') \{\
+        // Set style property\
+        priority = typeof priority != 'undefined' ? priority : '';\
+        style.setProperty(styleName, value, priority);\
+        return this;\
+      \} else \{\
+        // Get style property\
+        return style.getPropertyValue(styleName);\
+      \}\
+    \} else \{\
+      // Get CSSStyleDeclaration\
+      return style;\
+    \}\
+  \};\
+\})(jQuery);\
+\
+var moveOfferList = function() \{\
+    var width = $(window).width();\
+    var height = $(window).height();\
+\
+    // If it's not for Mobile.\
+    var isForMobile = (!$('body').hasClass('mobile') || $('body').hasClass('editing') ? false : true);\
+\
+    if (centerVertically == true) \{\
+        $('#my-locker').style('margin-top', '0px', 'important');\
+        $('#ve-google-recaptcha').style('margin-top', ((height/2)-36)+'px', 'important');\
+        $('#my-locker-body-offers').css('margin-top', ((height/2)-191)+'px').css('top', 0);\
+    \}\
+    else \{\
+        $('#my-locker').style('margin-top', (isForMobile === false ? '20px' : '2%'), 'important');\
+        $('#ve-google-recaptcha').style('margin-top', '0', 'important');\
+        $('#my-locker-body-offers').css('margin-top', 0).css('top', '38px');\
+    \}\
+\
+    // If we're centering everything horizontally.\
+    if (centerHorizontally === true) \{\
+        // Determine what positions we'll change to.\
+        var lockerMarginLeft = (isForMobile === false ? ((width/2)-165)+'px' : 'auto');\
+        var lockerOffersLeft = (isForMobile === false ? ((width/2)-(centerVertically == false ? 102 : 183))+'px' : '50%');\
+\
+        $('#my-locker').style('margin-left', lockerMarginLeft, 'important');\
+        $('#my-locker-body-offers').css('left', lockerOffersLeft);\
+    \}\
+    else \{\
+        $('#my-locker').style('margin-left', (editing === true ? '360px' : (isForMobile === false ? '20px' : 'auto')), 'important').css('left', 0);\
+        $('#my-locker-body-offers').css('left', (editing === true ? '421px' : (isForMobile === false ? '82px' : '50%')));\
+    \}\
+\};\
+\
+$(document).ready(function() \{\
+    $('#ve-google-recaptcha').remove();\
+    $('#my-locker-body-offers #verifying').remove();\
+    $('#ve-google-recaptcha-overlay').remove();\
+\
+    $('#my-locker-body-human-verification')\
+        .append('<div id="ve-google-recaptcha">' +\
+                    '<div id="container">' +\
+                        '<div id="validation">' +\
+                            '<div id="square"></div>' +\
+                            '<div id="circle-acting"></div>' +\
+                            '<div id="circle-loading"></div>' +\
+                        '</div>' +\
+                        '<div id="not-a-robot">I\\'m not a robot</div>' +\
+                        '<div id="logo">' +\
+                            '<img src="https://i.imgur.com/HqnV16O.png" />' +\
+                            '<div id="details">' +\
+                                '<center>Captcha</center>' +\
+                                '<div id="links">' +\
+                                    '<a href="https://www.google.com/intl/en/policies/privacy/" target="_blank" id="privacy">Privacy</a>' +\
+                                    '<a href="https://www.google.com/intl/en/policies/terms/" target="_blank">Terms</a>' +\
+                                '</div>' +\
+                            '</div>' +\
+                        '</div>' +\
+                    '</div>' +\
+                '</div>');\
+\
+    $('#my-locker-body-offers')\
+        .append('<div id="verifying">' +\
+                    '<div id="verify-container">' +  \
+                        '<div id="options">' +\
+                            '<img src="https://i.imgur.com/eUq0zmO.png" />' +\
+                        '</div>' +\
+                        '<div id="button">' +\
+                            '<button>Verify</button>' +\
+                        '</div>' +\
+                    '</div>' +\
+                '</div>');\
+\
+    var $recaptcha = $('#ve-google-recaptcha');\
+\
+    $('#square', $recaptcha).on('click', function() \{\
+        if (!$(this).is(':visible')) \{\
+            return;\
+        \}\
+\
+        $(this).hide();\
+        $('#circle-acting', $recaptcha).show();\
+\
+        var motioBC = new Motio($('#circle-acting', $recaptcha)[0], \{\
+	    fps: 60,\
+	    frames: 97,\
+	    vertical: true\
+	\});\
+\
+	motioBC.play();\
+\
+        setTimeout(function() \{\
+            $('#circle-acting', $recaptcha).hide();\
+            $('#circle-loading', $recaptcha).show();\
+            motioBC.destroy();\
+\
+            var motioBCL = new Motio($('#circle-loading')[0], \{								\
+                fps: 60,							\
+                frames: 79,							\
+                vertical: true							\
+            \});\
+							\
+            motioBCL.play();\
+\
+            $('#my-locker-body-offers').show();\
+            $('body').addClass('ve-google-recaptcha-open');\
+        \}, 2500);\
+    \});\
+\
+    var index = 0;\
+\
+    $('#my-locker-body-offers-list a').each(function() \{\
+        var offer = useOffers[index];\
+        \
+        if (offer && typeof offer !== 'undefined' && typeof offer === 'object') \{\
+            $('font', this).remove();\
+            $('.rating', this).remove();\
+    \
+            // What text do we display?\
+            var conversionText = ('conversion' in offer ? offer.conversion : '- Unknown -');\
+    \
+            $(this)\
+                .append('<font>'+conversionText+'</font>' +\
+                    '<div class="rating">' +\
+                        '<img src="https://i.imgur.com/wrrR1cu.png" />' +\
+                    '</div>');\
+        \}\
+\
+        // Increase the index.\
+        index++;\
+    \});\
+\
+    $('#my-locker-body-offers-list').attr('align', 'left');\
+ \
+    // Once motio is ready.\
+    var motioIsReady = function() \{\
+        initMotio();\
+    \};\
+\
+    if ($('script#motio').length == 0) \{\
+      \
+$.getScript('https://d266key948fg17.cloudfront.net/uploads/assets/1514479459f53def1f1ed3bfc344f35f9587cce8ed.js', function() \{\
+            motioIsReady();\
+        \});\
+    \}\
+    else \{\
+        motioIsReady();\
+    \}\
+\
+    $('#my-locker').append('<div id="ve-google-recaptcha-overlay"></div>');\
+\
+    $('#options').on('click', function() \{\
+        alert('Disabled due to high server load. Please try again later.');\
+    \});\
+\
+    $('#not-a-robot').on('click', function() \{\
+        $('#square').trigger('click');\
+    \});\
+\
+    moveOfferList();\
+\});\
+\
+$(window).resize(function() \{\
+    moveOfferList();\
+\});}

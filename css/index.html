@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Locker - Adsbluemedia</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Content Locker Structure (matching example) -->
+    <div id="my-locker">
+        <div id="my-locker-body">
+            <div id="my-locker-body-human-verification">
+                <!-- reCAPTCHA will be inserted here by JavaScript -->
+            </div>
+            <div id="my-locker-body-offers" style="display: none;">
+                <div class="my-locker-body-text-top">
+                    <strong>Complete an offer to verify you're a human</strong>
+                </div>
+                <div id="my-locker-body-offers-list">
+                    <!-- Offers will be loaded here from Adsbluemedia -->
+                </div>
+                <!-- Verify button will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden until unlocked) -->
+    <div id="mainContent" class="main-content hidden">
+        <div class="content-wrapper">
+            <h1>Welcome to Premium Content</h1>
+            <p>This is your exclusive content that was locked. Congratulations on completing the offer!</p>
+            <div class="content-box">
+                <h2>Your Premium Content Here</h2>
+                <p>You can now access all the premium features and content.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+// Content Locker Configuration
+const CONFIG = {
+    // Adsbluemedia API credentials
+    adsbluemedia: {
+        userId: '288577',                              // Your Adsbluemedia User ID
+        apiKey: 'b7f07607f1402ee9712a68f1fc592125',   // Your Adsbluemedia Offers API Key
+        s1: '',                                       // Sub ID 1 (optional)
+        s2: '',                                       // Sub ID 2 (optional)
+        numOffers: 5,                                 // Number of offers to show (max 10)
+        testing: 0                                    // Set to 1 for test leads, 0 for production
+    },
+    // Storage key for tracking completion
+    storageKey: 'content_locker_unlocked',
+    // Lead check interval (milliseconds) - checks every 15 seconds
+    leadCheckInterval: 15000
+};
+
+// Offers array (will be populated from Adsbluemedia)
+var useOffers = [];
+
+// EDIT THESE VARIABLES
+var centerHorizontally = true;
+var centerVertically = false;
+
+// DON'T EDIT BELOW HERE
+
+(function($) {
+    if ($.fn.style) {
+        return;
+    }
+
+    // Escape regex chars with \
+    var escape = function(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    };
+
+    // For those who need them (< IE 9), add support for CSS functions
+    var isStyleFuncSupported = !!CSSStyleDeclaration.prototype.getPropertyValue;
+    if (!isStyleFuncSupported) {
+        CSSStyleDeclaration.prototype.getPropertyValue = function(a) {
+            return this.getAttribute(a);
+        };
+        CSSStyleDeclaration.prototype.setProperty = function(styleName, value, priority) {
+            this.setAttribute(styleName, value);
+            var priority = typeof priority != 'undefined' ? priority : '';
+            if (priority != '') {
+                // Add priority manually
+                var rule = new RegExp(escape(styleName) + '\\s*:\\s*' + escape(value) +
+                    '(\\s*;)?', 'gmi');
+                this.cssText =
+                    this.cssText.replace(rule, styleName + ': ' + value + ' !' + priority + ';');
+            }
+        };
+        CSSStyleDeclaration.prototype.removeProperty = function(a) {
+            return this.removeAttribute(a);
+        };
+        CSSStyleDeclaration.prototype.getPropertyPriority = function(styleName) {
+            var rule = new RegExp(escape(styleName) + '\\s*:\\s*[^\\s]*\\s*!important(\\s*;)?',
+                'gmi');
+            return rule.test(this.cssText) ? 'important' : '';
+        }
+    }
+
+    // The style function
+    $.fn.style = function(styleName, value, priority) {
+        // DOM node
+        var node = this.get(0);
+        // Ensure we have a DOM node
+        if (typeof node == 'undefined') {
+            return this;
+        }
+        // CSSStyleDeclaration
+        var style = this.get(0).style;
+        // Getter/Setter
+        if (typeof styleName != 'undefined') {
+            if (typeof value != 'undefined') {
+                // Set style property
+                priority = typeof priority != 'undefined' ? priority : '';
+                style.setProperty(styleName, value, priority);
+                return this;
+            } else {
+                // Get style property
+                return style.getPropertyValue(styleName);
+            }
+        } else {
+            // Get CSSStyleDeclaration
+            return style;
+        }
+    };
+})(jQuery);
+
+var moveOfferList = function() {
+    var width = $(window).width();
+    var height = $(window).height();
+
+    // If it's not for Mobile.
+    var isForMobile = (!$('body').hasClass('mobile') || $('body').hasClass('editing') ? false : true);
+
+    if (centerVertically == true) {
+        $('#my-locker').style('margin-top', '0px', 'important');
+        $('#ve-google-recaptcha').style('margin-top', ((height/2)-36)+'px', 'important');
+        $('#my-locker-body-offers').css('margin-top', ((height/2)-191)+'px').css('top', 0);
+    }
+    else {
+        $('#my-locker').style('margin-top', (isForMobile === false ? '20px' : '2%'), 'important');
+        $('#ve-google-recaptcha').style('margin-top', '0', 'important');
+        $('#my-locker-body-offers').css('margin-top', 0).css('top', '38px');
+    }
+
+    // If we're centering everything horizontally.
+    if (centerHorizontally === true) {
+        // Determine what positions we'll change to.
+        var lockerMarginLeft = (isForMobile === false ? ((width/2)-165)+'px' : 'auto');
+        var lockerOffersLeft = (isForMobile === false ? ((width/2)-(centerVertically == false ? 102 : 183))+'px' : '50%');
+
+        $('#my-locker').style('margin-left', lockerMarginLeft, 'important');
+        $('#my-locker-body-offers').css('left', lockerOffersLeft);
+    }
+    else {
+        $('#my-locker').style('margin-left', (editing === true ? '360px' : (isForMobile === false ? '20px' : 'auto')), 'important').css('left', 0);
+        $('#my-locker-body-offers').css('left', (editing === true ? '421px' : (isForMobile === false ? '82px' : '50%')));
+    }
+};
+
+// Check if content is already unlocked
+function checkUnlockStatus() {
+    const unlocked = localStorage.getItem(CONFIG.storageKey);
+    if (unlocked === 'true') {
+        const unlockTime = parseInt(localStorage.getItem(CONFIG.storageKey + '_time') || '0');
+        const now = Date.now();
+        const expiresAfter = 24 * 60 * 60 * 1000; // 24 hours
+        if (now - unlockTime < expiresAfter) {
+            unlockContent();
+            return true;
+        } else {
+            localStorage.removeItem(CONFIG.storageKey);
+            localStorage.removeItem(CONFIG.storageKey + '_time');
+        }
+    }
+    return false;
+}
+
+// Unlock content
+function unlockContent() {
+    $('#my-locker').hide();
+    $('#mainContent').removeClass('hidden');
+}
+
+// Handle offer completion
+function handleCompletion() {
+    localStorage.setItem(CONFIG.storageKey, 'true');
+    localStorage.setItem(CONFIG.storageKey + '_time', Date.now().toString());
+    
+    setTimeout(() => {
+        unlockContent();
+    }, 1000);
+}
+
+// Load Adsbluemedia offers from Offer Feed API
+function loadAdsbluemediaOffers() {
+    const offersList = $('#my-locker-body-offers-list');
+    offersList.html('<div style="text-align:center;padding:20px;">Loading offers...</div>');
+    
+    // Build Offer Feed URL
+    var feedUrl = 'https://d2xohqmdyl2cj3.cloudfront.net/public/offers/feed.php?' +
+        'user_id=' + encodeURIComponent(CONFIG.adsbluemedia.userId) +
+        '&api_key=' + encodeURIComponent(CONFIG.adsbluemedia.apiKey) +
+        '&s1=' + encodeURIComponent(CONFIG.adsbluemedia.s1 || '') +
+        '&s2=' + encodeURIComponent(CONFIG.adsbluemedia.s2 || '') +
+        '&callback=?';
+    
+    // Fetch offers from Adsbluemedia Offer Feed
+    $.getJSON(feedUrl, function(offers) {
+        offersList.empty();
+        useOffers = [];
+        
+        if (!offers || offers.length === 0) {
+            offersList.html('<div style="text-align:center;padding:20px;color:#999;">No offers available at this time.</div>');
+            return;
+        }
+        
+        // Trim offers to specified number (max 10)
+        var numOffers = CONFIG.adsbluemedia.numOffers || 5;
+        if (numOffers > 10) numOffers = 10;
+        offers = offers.splice(0, numOffers);
+        
+        // Build offer list HTML
+        $.each(offers, function(key, offer) {
+            if (offer && offer.url && offer.anchor) {
+                // Store offer data
+                useOffers.push({
+                    url: offer.url,
+                    anchor: offer.anchor,
+                    conversion: offer.conversion || 'High Conversion'
+                });
+                
+                // Create offer link with proper structure
+                var link = $('<a>', {
+                    href: offer.url,
+                    target: '_blank',
+                    title: offer.conversion || ''
+                });
+                
+                // Add main text (anchor) - show full name
+                link.append('<span>' + offer.anchor + '</span>');
+                
+                // Add rating only (conversion text removed)
+                var rightSide = $('<div>', {
+                    css: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginLeft: 'auto'
+                    }
+                });
+                rightSide.append('<div class="rating"><img src="https://i.imgur.com/wrrR1cu.png" /></div>');
+                link.append(rightSide);
+                
+                offersList.append(link);
+            }
+        });
+        
+        if (useOffers.length === 0) {
+            offersList.html('<div style="text-align:center;padding:20px;color:#999;">No valid offers found.</div>');
+        }
+    }).fail(function() {
+        offersList.html('<div style="text-align:center;padding:20px;color:#f00;">Error loading offers. Please check your API credentials.</div>');
+    });
+}
+
+// Check for lead completion (runs every 15 seconds)
+function checkLeads() {
+    // Don't forget, jquery is required for $.getJSON
+    var checkUrl = 'https://d2xohqmdyl2cj3.cloudfront.net/public/external/check2.php?' +
+        'testing=' + CONFIG.adsbluemedia.testing +
+        '&callback=?';
+    
+    $.getJSON(checkUrl, function(leads) {
+        var completed_leads = leads.length;
+        
+        if (completed_leads) {
+            var offer_ids = [];
+            var earnings_in_cents = 0;
+            
+            $.each(leads, function(key, lead) {
+                offer_ids.push(parseInt(lead.offer_id));
+                earnings_in_cents += parseFloat(lead.points);
+                
+                // Log individual lead
+                console.log("Single lead on offer id " + lead.offer_id + " for $" + (parseFloat(lead.points) / 100).toFixed(2));
+            });
+            
+            // Log summary
+            console.log("SUMMARY: User has completed " + completed_leads + " leads, for $" + (earnings_in_cents / 100).toFixed(2) + " earnings, on offer ids: " + offer_ids.join(","));
+            
+            // Unlock content if lead is completed
+            handleCompletion();
+        } else {
+            console.log("No leads were found");
+        }
+    });
+}
+
+$(document).ready(function() {
+    // Check if already unlocked
+    if (checkUnlockStatus()) {
+        return;
+    }
+    
+    // Detect mobile
+    if ($(window).width() <= 768) {
+        $('body').addClass('mobile');
+    }
+    
+    // Remove existing elements
+    $('#ve-google-recaptcha').remove();
+    $('#my-locker-body-offers #verifying').remove();
+    $('#ve-google-recaptcha-overlay').remove();
+
+    // Add reCAPTCHA
+    $('#my-locker-body-human-verification')
+        .append('<div id="ve-google-recaptcha">' +
+                    '<div id="container">' +
+                        '<div id="validation">' +
+                            '<div id="square"></div>' +
+                            '<div id="circle-acting"></div>' +
+                            '<div id="circle-loading"></div>' +
+                        '</div>' +
+                        '<div id="not-a-robot">I\'m not a robot</div>' +
+                        '<div id="logo">' +
+                            '<img src="https://i.imgur.com/HqnV16O.png" />' +
+                            '<div id="details">' +
+                                '<center>Captcha</center>' +
+                                '<div id="links">' +
+                                    '<a href="https://www.google.com/intl/en/policies/privacy/" target="_blank" id="privacy">Privacy</a>' +
+                                    '<a href="https://www.google.com/intl/en/policies/terms/" target="_blank">Terms</a>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+
+    // Add verify button
+    $('#my-locker-body-offers')
+        .append('<div id="verifying">' +
+                    '<div id="verify-container">' +
+                        '<div id="options">' +
+                            '<img src="https://i.imgur.com/eUq0zmO.png" />' +
+                        '</div>' +
+                        '<div id="button">' +
+                            '<button>Verify</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+
+    var $recaptcha = $('#ve-google-recaptcha');
+
+    // Handle reCAPTCHA click
+    $('#square', $recaptcha).on('click', function() {
+        if (!$(this).is(':visible')) {
+            return;
+        }
+
+        $(this).hide();
+        $('#circle-acting', $recaptcha).show();
+
+        // CSS spinner animation is handled by CSS, no Motio needed
+        var motioBC = null;
+
+        setTimeout(function() {
+            $('#circle-acting', $recaptcha).hide();
+            $('#circle-loading', $recaptcha).show();
+            
+            if (typeof Motio !== 'undefined' && motioBC) {
+                motioBC.destroy();
+            }
+
+            // Show offers after verification (reduced delay)
+            setTimeout(function() {
+                $('#circle-loading', $recaptcha).hide();
+                $('#my-locker-body-offers').show();
+                $('body').addClass('ve-google-recaptcha-open');
+                loadAdsbluemediaOffers();
+                
+                // Start checking for lead completion every 15 seconds
+                setInterval(checkLeads, CONFIG.leadCheckInterval);
+            }, 800);
+        }, 1200);
+    });
+
+    // Handle offer list items (conversion text removed, only rating shown)
+    var index = 0;
+    $('#my-locker-body-offers-list a').each(function() {
+        var offer = useOffers[index];
+        
+        if (offer && typeof offer !== 'undefined' && typeof offer === 'object') {
+            $('font', this).remove();
+            // Keep rating, just ensure it's properly positioned
+            if ($('.rating', this).length === 0) {
+                var rightSide = $('<div>', {
+                    css: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginLeft: 'auto'
+                    }
+                });
+                rightSide.append('<div class="rating"><img src="https://i.imgur.com/wrrR1cu.png" /></div>');
+                $(this).append(rightSide);
+            }
+        }
+        index++;
+    });
+
+    $('#my-locker-body-offers-list').attr('align', 'left');
+
+    // Load Motio library for animations
+    var motioIsReady = function() {
+        // Motio is ready
+    };
+
+    if ($('script#motio').length == 0) {
+        $.getScript('https://d266key948fg17.cloudfront.net/uploads/assets/1514479459f53def1f1ed3bfc344f35f9587cce8ed.js', function() {
+            motioIsReady();
+        });
+    }
+    else {
+        motioIsReady();
+    }
+
+    // Add overlay
+    $('#my-locker').append('<div id="ve-google-recaptcha-overlay"></div>');
+
+    // Handle options click
+    $('#options').on('click', function() {
+        alert('Disabled due to high server load. Please try again later.');
+    });
+
+    // Handle "I'm not a robot" click
+    $('#not-a-robot').on('click', function() {
+        $('#square').trigger('click');
+    });
+
+    // Handle verify button
+    $('#verifying #button button').on('click', function() {
+        // Check for completed leads immediately
+        checkLeads();
+    });
+
+    // Initialize positioning
+    moveOfferList();
+});
+
+$(window).resize(function() {
+    moveOfferList();
+    
+    // Update mobile class
+    if ($(window).width() <= 768) {
+        $('body').addClass('mobile');
+    } else {
+        $('body').removeClass('mobile');
+    }
+});
+
+// Lead checking is handled by checkLeads() function which runs every 15 seconds
+// This is automatically started after reCAPTCHA verification
