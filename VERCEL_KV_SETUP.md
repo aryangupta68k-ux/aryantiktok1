@@ -43,7 +43,7 @@ Or push to your main branch (if auto-deploy is enabled).
 
 Visit (replace with your domain):
 ```
-https://tokuser.com/api/postback?offer_id=123&offer_name=Test+Offer&payout=1.50&session_ip=127.0.0.1
+https://addtok.com/api/postback?offer_id=123&offer_name=Test+Offer&payout=1.50&session_ip=127.0.0.1
 ```
 
 You should get an `OK` response and see logs in Vercel dashboard.
@@ -52,7 +52,7 @@ You should get an `OK` response and see logs in Vercel dashboard.
 
 Visit:
 ```
-https://tokuser.com/api/completions
+https://addtok.com/api/completions
 ```
 
 You should see a JSON response with all stored completions.
@@ -60,7 +60,7 @@ You should see a JSON response with all stored completions.
 ### Check Completion Status:
 
 ```
-https://tokuser.com/api/check-completion?offer_id=123&ip=127.0.0.1
+https://addtok.com/api/check-completion?offer_id=123&ip=127.0.0.1
 ```
 
 ## 🔍 Verify KV is Working
@@ -92,9 +92,9 @@ https://tokuser.com/api/check-completion?offer_id=123&ip=127.0.0.1
 
 ## 📊 Current API Endpoints
 
-- **POSTBACK**: `https://tokuser.com/api/postback` (called by OGAds)
-- **VIEW COMPLETIONS**: `https://tokuser.com/api/completions` (view all stored completions)
-- **CHECK COMPLETION**: `https://tokuser.com/api/check-completion` (check specific offer completion)
+- **POSTBACK**: `https://addtok.com/api/postback` (called by OGAds)
+- **VIEW COMPLETIONS**: `https://addtok.com/api/completions` (view all stored completions)
+- **CHECK COMPLETION**: `https://addtok.com/api/check-completion` (check specific offer completion)
 
 ## 🔗 OGAds Postback Setup
 
@@ -103,7 +103,7 @@ In your OGAds account:
 1. Go to **Postbacks** section
 2. Add new postback URL:
    ```
-   https://tokuser.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payout={payout}&session_ip={session_ip}&aff_sub4={aff_sub4}
+   https://addtok.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payout={payout}&session_ip={session_ip}&aff_sub4={aff_sub4}
    ```
 3. Configure which conversions trigger the postback (usually "Approved")
 4. Save and test

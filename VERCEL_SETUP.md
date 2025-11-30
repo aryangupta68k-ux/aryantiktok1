@@ -5,22 +5,22 @@
 Your project has been deployed to Vercel with the name: **aryantiktok1**
 
 **Production URL:** `https://aryantiktok1-*.vercel.app`  
-**Custom Domain:** `tokuser.com` (needs to be connected)
+**Custom Domain:** `addtok.com` (needs to be connected)
 
 ---
 
 ## 🔧 Required Setup Steps
 
-### Step 1: Connect Your Domain (tokuser.com)
+### Step 1: Connect Your Domain (addtok.com)
 
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
 2. Select project: **aryantiktok1**
 3. Go to **Settings** → **Domains**
-4. Add domain: `tokuser.com`
+4. Add domain: `addtok.com`
 5. Follow Vercel's DNS configuration instructions
 6. Wait for DNS propagation (can take a few minutes to 24 hours)
 
-Once connected, your site will be available at: `https://tokuser.com`
+Once connected, your site will be available at: `https://addtok.com`
 
 ---
 
@@ -65,19 +65,19 @@ After creating, you'll see:
 
 ### Step 4: Configure OGAds Postback URL
 
-Once your domain `tokuser.com` is connected:
+Once your domain `addtok.com` is connected:
 
 1. Log in to [OGAds Dashboard](https://app.ogads.com)
 2. Go to **Settings** → **Postback**
 3. Add this postback URL:
 
 ```
-https://tokuser.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payout={payout}&session_ip={session_ip}&affiliate_id={affiliate_id}&aff_sub={aff_sub}&aff_sub2={aff_sub2}&aff_sub3={aff_sub3}&aff_sub4={aff_sub4}&aff_sub5={aff_sub5}&source={source}&date={date}&time={time}&datetime={datetime}&session_timestamp={session_timestamp}&ran={ran}
+https://addtok.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payout={payout}&session_ip={session_ip}&affiliate_id={affiliate_id}&aff_sub={aff_sub}&aff_sub2={aff_sub2}&aff_sub3={aff_sub3}&aff_sub4={aff_sub4}&aff_sub5={aff_sub5}&source={source}&date={date}&time={time}&datetime={datetime}&session_timestamp={session_timestamp}&ran={ran}
 ```
 
 **Simplified version (minimum fields):**
 ```
-https://tokuser.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payout={payout}&session_ip={session_ip}&affiliate_id={affiliate_id}&aff_sub4={aff_sub4}
+https://addtok.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payout={payout}&session_ip={session_ip}&affiliate_id={affiliate_id}&aff_sub4={aff_sub4}
 ```
 
 4. Select: **Fire on: Conversion**
@@ -90,7 +90,7 @@ https://tokuser.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&pay
 **Option 1: Test with Browser**
 Visit this URL (replace with your actual domain):
 ```
-https://tokuser.com/api/postback?offer_id=123&offer_name=Test+Offer&payout=1.50&session_ip=192.168.1.1
+https://addtok.com/api/postback?offer_id=123&offer_name=Test+Offer&payout=1.50&session_ip=192.168.1.1
 ```
 
 Expected response: `OK`
@@ -98,7 +98,7 @@ Expected response: `OK`
 **Option 2: View All Completions**
 Visit:
 ```
-https://tokuser.com/api/completions
+https://addtok.com/api/completions
 ```
 
 You should see JSON data with all stored completions.
@@ -107,7 +107,7 @@ You should see JSON data with all stored completions.
 
 ## 📋 Quick Checklist
 
-- [ ] Domain `tokuser.com` connected to Vercel project
+- [ ] Domain `addtok.com` connected to Vercel project
 - [ ] Vercel KV database created
 - [ ] Environment variables added (`KV_REST_API_URL`, `KV_REST_API_TOKEN`)
 - [ ] Project redeployed after adding env vars
@@ -119,10 +119,10 @@ You should see JSON data with all stored completions.
 
 ## 🔗 Important URLs
 
-- **Production Site:** `https://tokuser.com` (after domain setup)
-- **Postback Endpoint:** `https://tokuser.com/api/postback`
-- **View Completions:** `https://tokuser.com/api/completions`
-- **Check Completion:** `https://tokuser.com/api/check-completion?offer_id=123&ip=1.2.3.4`
+- **Production Site:** `https://addtok.com` (after domain setup)
+- **Postback Endpoint:** `https://addtok.com/api/postback`
+- **View Completions:** `https://addtok.com/api/completions`
+- **Check Completion:** `https://addtok.com/api/check-completion?offer_id=123&ip=1.2.3.4`
 
 ---
 
@@ -140,7 +140,7 @@ You should see JSON data with all stored completions.
    - Make sure latest deployment is successful (green checkmark)
 
 3. **Test postback manually:**
-   - Visit `https://tokuser.com/api/postback?offer_id=123`
+   - Visit `https://addtok.com/api/postback?offer_id=123`
    - Should return "OK"
    - If error, check Vercel function logs
 
