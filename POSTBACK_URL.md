@@ -31,6 +31,10 @@ https://addtok.com/api/postback?offer_id={offer_id}&offer_name={offer_name}&payo
 ## Important Notes:
 
 - Make sure `addtok.com` domain is connected to your Vercel project
-- Postback will only work after Vercel KV is set up (see VERCEL_KV_SETUP.md)
+- Postback will only work after Edge Config is set up (see EDGE_CONFIG_SETUP.md)
 - Test the postback URL manually before configuring in OGAds
+
+## Full Setup Guide:
+
+For detailed step-by-step instructions, see: **POSTBACK_SETUP_GUIDE.md**
 
