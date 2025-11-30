@@ -1,29 +1,33 @@
-import { kv } from '@vercel/kv'
+import { get } from '@vercel/edge-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
- * Get all stored offer completions
+ * Get all stored offer completions from Edge Config
  * Optional endpoint to view completion logs
  */
 export async function GET(request: NextRequest) {
   try {
-    const completions = await kv.lrange('all_completions', 0, 9999)
+    // Get all completions from Edge Config
+    const allCompletions = await get('all_completions')
     
-    const parsed = completions.map((c: string) => {
+    let completions: any[] = []
+    if (allCompletions) {
       try {
-        return JSON.parse(c)
+        completions = typeof allCompletions === 'string' 
+          ? JSON.parse(allCompletions) 
+          : allCompletions
       } catch (e) {
-        return null
+        completions = []
       }
-    }).filter((c: any) => c !== null)
+    }
     
     // Sort by timestamp (newest first)
-    parsed.sort((a: any, b: any) => (b.timestamp || 0) - (a.timestamp || 0))
+    completions.sort((a: any, b: any) => (b.timestamp || 0) - (a.timestamp || 0))
 
     return NextResponse.json({
       success: true,
-      total: parsed.length,
-      completions: parsed
+      total: completions.length,
+      completions: completions
     })
     
   } catch (error) {
@@ -37,4 +41,3 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-

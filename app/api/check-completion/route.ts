@@ -1,8 +1,8 @@
-import { kv } from '@vercel/kv'
+import { get } from '@vercel/edge-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
- * Check if a specific offer has been completed
+ * Check if a specific offer has been completed using Edge Config
  * Used by the frontend to poll for completion status
  * 
  * Query params:
@@ -24,31 +24,36 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get all completions
-    const completions = await kv.lrange('all_completions', 0, 9999)
+    // Get all completions from Edge Config
+    const allCompletions = await get('all_completions')
     
-    // Parse and filter
-    const parsed = completions.map((c: string) => {
+    let completions: any[] = []
+    if (allCompletions) {
       try {
-        return JSON.parse(c)
+        completions = typeof allCompletions === 'string' 
+          ? JSON.parse(allCompletions) 
+          : allCompletions
       } catch (e) {
-        return null
+        completions = []
       }
-    }).filter((c: any) => c !== null && c.offer_id === offerId)
+    }
+
+    // Filter by offer_id
+    let filtered = completions.filter((c: any) => c.offer_id === offerId)
 
     // Filter by IP if provided
-    const filtered = ip 
-      ? parsed.filter((c: any) => c.session_ip === ip)
-      : parsed
+    if (ip) {
+      filtered = filtered.filter((c: any) => c.session_ip === ip)
+    }
 
     // Filter by aff_sub4 if provided
-    const final = affSub4
-      ? filtered.filter((c: any) => c.aff_sub4 === affSub4)
-      : filtered
+    if (affSub4) {
+      filtered = filtered.filter((c: any) => c.aff_sub4 === affSub4)
+    }
 
     // Check if any completion exists (completed in last 24 hours)
     const now = Date.now()
-    const recentCompletions = final.filter((c: any) => {
+    const recentCompletions = filtered.filter((c: any) => {
       const completionTime = c.timestamp || 0
       const hoursSinceCompletion = (now - completionTime) / (1000 * 60 * 60)
       return hoursSinceCompletion < 24 // Completed within last 24 hours
@@ -71,4 +76,3 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-

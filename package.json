@@ -39,6 +39,7 @@
     "@radix-ui/react-tooltip": "1.1.6",
     "@types/react-google-recaptcha": "^2.1.9",
     "@vercel/analytics": "latest",
+    "@vercel/edge-config": "^1.4.3",
     "@vercel/kv": "^0.2.1",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
