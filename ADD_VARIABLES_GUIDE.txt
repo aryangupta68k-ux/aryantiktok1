@@ -1,0 +1,29 @@
+QUICK GUIDE - ADD YOUR VALUES AS ENVIRONMENT VARIABLES
+
+You have:
+✅ Edge Config ID value
+✅ Write Token value
+
+Now add them:
+
+1. Go to: https://vercel.com/dashboard
+   → aryantiktok1 project
+   → Settings → Environment Variables
+
+2. Click "Add New"
+   Key: EDGE_CONFIG_ID
+   Value: (paste your Edge Config ID)
+   ✅ Check: Production, Preview, Development
+   Save
+
+3. Click "Add New" again
+   Key: EDGE_CONFIG_WRITE_TOKEN
+   Value: (paste your Write Token)
+   ✅ Check: Production, Preview, Development
+   Save
+
+4. Go to Deployments → Redeploy
+
+5. Test: https://addtok.com/api/postback?offer_id=123&offer_name=Test&payout=1.50&session_ip=127.0.0.1
+
+Should return: OK ✅
